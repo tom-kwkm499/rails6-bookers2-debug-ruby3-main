@@ -4,7 +4,7 @@
       <h2>User info</h2>
       <%= render 'users/info', user: @user %>
       <h2 class="mt-3">New book</h2>
-      <%= render 'form', book: @book_new %>
+      <%= render 'books/form', book: @book_new %>
     </div>
     <div class='col-md-8 offset-md-1'>
   		<h2>Book detail</h2>
@@ -22,10 +22,40 @@
                 <td><%= link_to "Destroy", book_path(@book[:id]), method: :delete, "data-confirm" => "本当に消しますか？", class:"btn btn-danger"%></td>
               <% end %>
 
-            <%= render 'favo', obj: @book%>
+            <td><%= render 'books/favo', obj: @book %></td>
+            <%# コメント件数表示　%>
+            <td>コメント数：<%= @book.book_comments.count %></td>
 
         </tr>
+        <%# コメント一覧　%>
+        <% @book.book_comments.each do |book_comment| %>
+          <tr>
+            <td><%= image_tag book_comment.user.get_profile_image, size:"50x50" %><br>
+            <%= link_to book_comment.user.name, book_comment.user %></td>
+            <td><%= book_comment.comment %></td>
+            <% if book_comment.user == current_user %>
+              <td><%= link_to "削除", book_book_comment_path(book_id: @book.id, id: book_comment.id), method: :delete, class:"btn btn-danger" %></td>
+            <% end %>
+          </tr>
+        <% end %>
       </table>
+      
+      <%# コメントフォーム　%>
+      <div class='col-md-8 '>
+        <%= form_with model: [@book, @book_comment], local: true do |f| %>
+          <% if @book_comment.errors.any? %>
+            <div class="alert alert-danger">
+              <ul>
+                <% @book_comment.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+          <%= f.text_area :comment, rows: '5', placeholder: "コメントをここに" %>
+          <%= f.submit "送信する" %>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
