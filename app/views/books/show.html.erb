@@ -17,18 +17,19 @@
           </td>
           <td><%= link_to @book.title, @book %></td>
           <td><%= @book.body %></td>
+          <td><%= render 'books/favo', obj: @book %></td>
+          <%# コメント件数表示 %>
+          <td>コメント数：<%= @book.book_comments.count %></td>
               <% if @user == current_user %>
                 <td><%= link_to "Edit", edit_book_path(@book[:id]), class:"btn btn-success" %></td>
                 <td><%= link_to "Destroy", book_path(@book[:id]), method: :delete, "data-confirm" => "本当に消しますか？", class:"btn btn-danger"%></td>
               <% end %>
 
-            <td><%= render 'books/favo', obj: @book %></td>
-            <%# コメント件数表示　%>
-            <td>コメント数：<%= @book.book_comments.count %></td>
+
 
         </tr>
         </table>
-        <%# コメント一覧　%>
+        <%# コメント一覧 %>
         <table>
         <% @book.book_comments.each do |book_comment| %>
           <tr>
@@ -47,7 +48,7 @@
         <% end %>
       </table>
       
-      <%# コメントフォーム　%>
+      <%# コメントフォーム %>
       
         <%= form_with model: [@book, @book_comment], local: true do |f| %>
           <% if @book_comment.errors.any? %>
