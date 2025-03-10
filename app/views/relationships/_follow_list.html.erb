@@ -26,3 +26,15 @@
     <p>ユーザーはいません</p>
   <% end %>
 </div>
+
+
+
+<% @results.each do |result| %>
+            <li>
+              <% if result.is_a?(User) %>
+                ユーザー: <%= link_to result.name, user_path(result) %>
+              <% elsif result.is_a?(Book) %>
+                書籍: <%= link_to result.title, book_path(result) %>
+              <% end %>
+            </li>
+          <% end %>

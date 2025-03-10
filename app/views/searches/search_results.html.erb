@@ -1,0 +1,56 @@
+<div class='container'>
+  <div class="row">
+    <% if @search_type == 'User' %>
+      <h2>Users search for "<%= @query %>"</h2>
+    <% else @search_type == 'Book' %>
+      <h2>Books search for "<%= @query %>"</h2>
+    <% end %>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <% if @results.any? %>
+        <table class ="table">
+          <% if @search_type == 'User' %>
+            <thead>
+              <tr>
+                <th></th>
+                <th>name</th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <% @results.each do |result| %>
+              <tbody>
+                <tr>
+                  <td><%= image_tag result.get_profile_image, size: '50x50' %></td>
+                  <td><%= link_to result.name, user_path(result) %></td>
+                  <td colspan="3"></td>
+                </tr>
+              </tbody>
+            <% end %>
+          <% else @search_type == 'Book' %>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Title</th>
+                <th>Opinion</th>
+              </tr>
+            </thead>
+            <% @results.each do |result| %>
+              <tbody>
+                <tr>
+                  <td><%= image_tag result.user.get_profile_image, size: '50x50' %></td>
+                  <td><%= link_to result.title, book_path(result) %></td>
+                  <td><%= result.body %></td>
+                </tr>
+              </tbody>
+            <% end %>
+          <% end %>
+        </table>
+      <% else %>
+        <p>該当する結果は見つかりませんでした。</p>
+      <% end %>
+    </div>
+  </div>
+</div>
